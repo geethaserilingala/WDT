@@ -15,7 +15,7 @@ $cookie=$_COOKIE;
 foreach ($cookie as $key=>$val) echo "<br>$key : $val";
 ?>
 <div id = "footer">
-<p align = "center"> &copy;  N.Ushasree all rights --reserved </p>
+<p align = "center"> &copy;  L.Geetha Seri all rights --reserved </p>
 </div>
 </body>
 </html>
@@ -43,7 +43,7 @@ setcookie("user","srit");
 setcookie("user1","srit1");
 ?>
 <div id = "footer">
-<p align = "center"> &copy; N.Ushasree all rights --reserved </p>
+<p align = "center"> &copy; L.Geetha Seri all rights --reserved </p>
 </div>
 </body>
 </html>
