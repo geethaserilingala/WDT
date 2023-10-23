@@ -1,0 +1,542 @@
+add.php
+<div class="form-group">
+<label>Name</label>
+<input type="text" name="sname" required/>
+</div>
+<div class="form-group">
+<label>Address</label>
+<input type="text" name="saddress" required/>
+</div>
+<div class="form-group">
+<label>Class         </label>
+<select name="class" required>
+<option value="" selected disabled>Select Class</option>
+<?php
+include 'config.php';
+$sql = "SELECT * FROM studentclass";
+$result = mysqli_query($conn, $sql) or die("Query Unsuccessful.");
+while($row = mysqli_fetch_assoc($result)){
+?>
+<option value="<?php echo $row['cid']; ?>"><?php echo $row['cname']; ?> </option>
+<?php } ?>
+</select>
+</div>
+<div class="form-group">
+<label>Phone</label>
+<input type="text" name="sphone" required/>
+</div>
+<input class="submit" type="submit" value="Save" />
+</form>
+</div>
+</div>
+
+<head>
+<style>
+.footer{
+position:fixed;
+left:0;
+bottom:0;
+width:100%;
+color:white;
+background:green;
+text-align:center;
+}
+</style>
+</head>
+<div class="footer">
+<p align="center"> &copy; N.Ushasree--Allrights Reserved
+</body>
+</html>
+
+</body>
+</html>
+
+
+config.php
+
+<?php
+$conn = mysqli_connect("localhost","root","","crud") or die("Connection Failed");
+?>
+crud.sql
+-- phpMyAdmin SQL Dump
+-- version 5.0.2
+-- https://www.phpmyadmin.net/
+-- Host: 127.0.0.1
+-- Generation Time: Apr 02, 2021 at 08:41 AM
+-- Server version: 10.4.14-MariaDB
+-- PHP Version: 7.2.33
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS
+*/;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+-- Database: `crud`
+-- Table structure for table `student`
+CREATE TABLE `student` (
+`sid` int(10) NOT NULL,
+`sname` varchar(30) NOT NULL,
+`saddress` varchar(100) NOT NULL,
+`sclass` int(10) NOT NULL,
+`sphone` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- Dumping data for table `student`
+INSERT INTO `student` (`sid`, `sname`, `saddress`, `sclass`, `sphone`) VALUES
+(1, 'Sila Khatri', '#34 sdfdsfsdf', 1, '9898989874'),
+(2, 'Anita Chettri', '#654 KD Building Mumbai', 1, '9874587456'),
+(3, 'Jasmine Singh', '#34 JC Road, abc', 1, '9845546546'),
+(4, 'Sangam B', '#76 SK Building,Pkr', 3, '9827135435'),
+(5, 'Ritika Singh', '#45 RS Buiding', 3, '34435435');
+-- Table structure for table `studentclass`
+CREATE TABLE `studentclass` (
+`cid` int(11) NOT NULL,
+`cname` varchar(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- Dumping data for table `studentclass`
+}
+INSERT INTO `studentclass` (`cid`, `cname`) VALUES
+(1, 'BCA'),
+(2, 'Btech'),
+(3, 'Bsc'),
+(4, 'Bcom');
+-- Indexes for dumped tables
+-- Indexes for table `student`
+ALTER TABLE `student`
+ADD PRIMARY KEY (`sid`);
+-- Indexes for table `studentclass`
+ALTER TABLE `studentclass`
+ADD PRIMARY KEY (`cid`);
+-- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT for table `student`
+ALTER TABLE `student`
+MODIFY `sid` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+-- AUTO_INCREMENT for table `studentclass`
+ALTER TABLE `studentclass`
+MODIFY `cid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+COMMIT;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+config.php:
+<?php
+$conn = mysqli_connect("localhost","root","","crud") or die("Connection Failed");
+?>
+delete.php
+<?php include 'header.php';
+if(isset($_POST['deletebtn'])){
+    include "config.php";
+    $stu_id = $_POST['sid'];
+    $sql = "DELETE FROM student WHERE sid = {$stu_id}";
+    $result = mysqli_query($conn, $sql) or die("Query Unsuccessful.");
+    header("Location: http://localhost/Experiment10/index.php");
+    mysqli_close($conn);
+}
+?>
+
+<div id="main-content">
+    <h2 align="center">Delete Record</h2>
+    <form class="post-form" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" align="center">
+        <div class="form-group" align="center">
+            <label>Id</label>
+            <input type="text" name="sid" />
+        </div>
+        <input class="submit" type="submit"  name="deletebtn"  value="Delete" />
+    </form>
+</div>
+
+<head>
+<style>
+.footer{
+position:fixed;
+left:0;
+bottom:0;
+width:100%;
+color:white;
+background:green;
+text-align:center;
+}
+</style>
+</head>
+<div class="footer">
+<p align="center"> &copy; N.Ushasree--Allrights Reserved
+</body>
+</html>
+delete-inline.php
+<?php
+$stu_id = $_GET['id'];
+include 'config.php';
+$sql = "DELETE FROM student WHERE sid = {$stu_id}";
+$result = mysqli_query($conn, $sql) or die("Query Unsuccessful.");
+header("Location: http://localhost/Experiment10/index.php");
+mysqli_close($conn);
+?>
+edit.php
+<?php include 'header.php'; ?>
+<div id="main-content" align="center">
+<h2>Update Record</h2>
+<?php
+include 'config.php';
+$stu_id = $_GET['id'];
+$sql = "SELECT * FROM student WHERE sid = {$stu_id}";
+$result = mysqli_query($conn, $sql) or die("Query Unsuccessful.");
+if(mysqli_num_rows($result) > 0) {
+while($row = mysqli_fetch_assoc($result)){
+?>
+<form class="post-form" action="updatedata.php" method="post">
+<div class="form-group">
+<label>Name</label>
+<input type="hidden" name="sid" value="<?php echo $row['sid']; ?>"/>
+<input type="text" name="sname" value="<?php echo $row['sname']; ?>"/>
+</div>
+<div class="form-group">
+<label>Address</label>
+<input type="text" name="saddress" value="<?php echo $row['saddress']; ?>"/>
+</div>
+<div class="form-group">
+<label>Class</label>
+<?php
+$sql1 = "SELECT * FROM studentclass";
+$result1 = mysqli_query($conn, $sql1) or die("Query Unsuccessful.");
+if(mysqli_num_rows($result1) > 0) {
+echo '<select name="sclass">';
+while($row1 = mysqli_fetch_assoc($result1)){
+if($row['sclass'] == $row1['cid']){
+$select = "selected";
+}else{
+$select = "";
+}
+echo "<option {$select} value='{$row1['cid']}'>{$row1['cname']}</option>";
+}
+echo "</select>";
+}
+?>
+</div>
+<div class="form-group">
+<label>Phone</label>
+<input type="text" name="sphone" value="<?php echo $row['sphone']; ?>"/>
+</div>
+<input class="submit" type="submit" value="Update"/>
+</form>
+<?php
+}
+}
+?>
+</div>
+</div>
+
+<head>
+<style>
+.footer{
+position:fixed;
+left:0;
+bottom:0;
+width:100%;
+color:white;
+background:green;
+text-align:center;
+}
+</style>
+</head>
+<div class="footer">
+<p align="center"> &copy; N.Ushasree--Allrights Reserved
+</body>
+</html>
+header.php
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Student List</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    #footer {
+      position: fixed; /* Fixed, not Position */
+      padding: 10px;
+      bottom: 0;
+      width: 100%;
+      height: 40px;
+    }
+  </style>
+<style>
+body {
+    font: 16px Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #e1e1e1;
+}
+
+#wrapper {
+    width: 1000px;
+    margin: 50px auto 0;
+    background-color: #fff;
+}
+
+#header {
+    text-align: center;
+    background-color: #F67437;
+    padding: 10px;
+}
+
+#header h1 {
+    color: #ffffff;
+    font-size: 40px;
+    font-style: italic;
+    font-family: serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+#menu {
+    background-color: #fff;
+}
+
+#menu ul {
+    font-size: 0;
+    padding: 0 10px;
+    margin: 0;
+    list-style: none;
+}
+
+#menu ul li {
+    display: inline-block;
+}
+
+#menu ul li a {
+    color: #f67437;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 8px 10px;
+    display: block;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+#menu ul li a:hover {
+    background-color: rgb(255, 255, 255, 0.2);
+}
+</style>
+</head>
+<body>
+  <div id="wrapper">
+    <div id="header">
+      <h1>Students List using CRUD Operations</h1>
+    </div>
+    <div id="menu">
+      <ul>
+        <li>
+          <a href="index.php">Home</a>
+        </li>
+        <li>
+          <a href="add.php">Add</a>
+        </li>
+        <li>
+          <a href="update.php">Update</a>
+        </li>
+        <li>
+          <a href="delete.php">Delete</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
+index.php
+<?php
+include 'header.php';
+?>
+<div id="main-content">
+<?php
+include 'config.php';
+$sql = "SELECT * FROM student JOIN studentclass WHERE student.sclass =
+studentclass.cid";
+$result = mysqli_query($conn, $sql) or die("Query Unsuccessful.");
+if(mysqli_num_rows($result) > 0) {
+?>
+<h2 align="center">All Records</h2>
+<table cellpadding="7px" align="center">
+<thead>
+<th>Id</th>
+<th>Name</th>
+<th>Address</th>
+<th>Class</th>
+<th>Phone</th>
+<th>Action</th>
+</thead>
+<tbody>
+<?php
+while($row = mysqli_fetch_assoc($result)){
+?>
+<tr>
+<td><?php echo $row['sid']; ?></td>
+<td><?php echo $row['sname']; ?></td>
+<td><?php echo $row['saddress']; ?></td>
+<td><?php echo $row['cname']; ?></td>
+<td><?php echo $row['sphone']; ?></td>
+<td>
+<a href='edit.php?id=<?php echo $row['sid']; ?>'>Edit</a>
+<a href='delete-inline.php?id=<?php echo $row['sid']; ?>'>Delete</a>
+</td>
+</tr>
+<?php } ?>
+</tbody>
+</table>
+<?php }else{
+echo "<h2>No Record Found</h2>";
+}
+mysqli_close($conn);
+?>
+</div>
+</div>
+
+<head>
+<style>
+.footer{
+position:fixed;
+left:0;
+bottom:0;
+width:100%;
+color:white;
+background:green;
+text-align:center;
+}
+</style>
+</head>
+<div class="footer">
+<p align="center"> &copy; N.Ushasree--Allrights Reserved
+</body>
+</html>
+
+savedata.php
+<?php
+$stu_name = $_POST['sname'];
+$stu_address = $_POST['saddress'];
+$stu_class = $_POST['class'];
+$stu_phone = $_POST['sphone'];
+$conn = mysqli_connect("localhost","root","","crud") or die("Connection Failed");
+$sql = "INSERT INTO student(sname,saddress,sclass,sphone) VALUES
+('{$stu_name}','{$stu_address}','{$stu_class}','{$stu_phone}')";
+$result = mysqli_query($conn, $sql) or die("Query Unsuccessful.");
+header("Location: http://localhost/Experiment10/index.php");
+mysqli_close($conn);
+?>
+
+style.css
+body {
+    font: 16px Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #e1e1e1;
+}
+
+#wrapper {
+    width: 1000px;
+    margin: 50px auto 0;
+    background-color: #fff;
+}
+
+#header {
+    text-align: center;
+    background-color: #F67437;
+    padding: 10px;
+}
+
+#header h1 {
+    color: #ffffff;
+    font-size: 40px;
+    font-style: italic;
+    font-family: serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+#menu {
+    background-color: #fff;
+}
+
+#menu ul {
+    font-size: 0;
+    padding: 0 10px;
+    margin: 0;
+    list-style: none;
+}
+
+#menu ul li {
+    display: inline-block;
+}
+
+#menu ul li a {
+    color: #f67437;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 8px 10px;
+    display: block;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+#menu ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+update.php
+<?php include 'header.php'; ?>
+<div id="main-content" align="center">
+<h2>Edit Record</h2>
+<form class="post-form" action="<?php $_SERVER['PHP_SELF']; ?>" method="post">
+<div class="form-group">
+<label>Id</label>
+<input type="text" name="sid" />
+</div>
+<input class="submit" type="submit" name="showbtn" value="Show" />
+</form>
+<?php
+if(isset($_POST['showbtn'])){
+include 'config.php';
+$stu_id = $_POST['sid'];
+$sql = "SELECT * FROM student WHERE sid = {$stu_id}";
+$result = mysqli_query($conn, $sql) or die("Query Unsuccessful.");
+if(mysqli_num_rows($result) > 0) {
+while($row = mysqli_fetch_assoc($result)){
+?>
+<form class="post-form" action="updatedata.php" method="post">
+<div class="form-group">
+<label for="">Name</label>
+<input type="hidden" name="sid" value="<?php echo $row['sid']; ?>" />
+<input type="text" name="sname" value="<?php echo $row['sname']; ?>" />
+</div>
+<div class="form-group">
+<label>Address</label>
+<input type="text" name="saddress" value="<?php echo $row['saddress']; ?>" />
+</div>
+<div class="form-group">
+<label>Class</label>
+<?php
+$sql1 = "SELECT * FROM studentclass";
+$result1 = mysqli_query($conn, $sql1) or die("Query Unsuccessful.");
+if(mysqli_num_rows($result1) > 0) {
+echo '<select name="sclass">';
+while($row1 = mysqli_fetch_assoc($result1)){
+if($row['sclass'] == $row1['cid']){
+$select = "selected";
+}else{
+$select = "";
+}
+updatedata.php
+<?php
+$stu_id = $_POST['sid'];
+$stu_name = $_POST['sname'];
+$stu_address = $_POST['saddress'];
+$stu_class = $_POST['sclass'];
+$stu_phone = $_POST['sphone'];
+include 'config.php';
+$sql = "UPDATE student SET sname = '{$stu_name}', saddress = '{$stu_address}',sclass =
+'{$stu_class}', sphone = '{$stu_phone}' WHERE sid = {$stu_id}";
+$result = mysqli_query($conn, $sql) or die("Query Unsuccessful.");
+header("Location: http://localhost/Experiment10/index.php");
+mysqli_close($conn);
+?>
+
