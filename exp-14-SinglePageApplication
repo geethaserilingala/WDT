@@ -79,7 +79,7 @@ text-align:center;
     <div ng-view></div>
 
     <div id="footer">
-        <p align="center"> &copy; M. Hemanth Kumar Rao--all rights reserved </p>
+        <p align="center"> &copy; L.Geetha Seri--All rights reserved </p>
     </div>
 </body>
 </html>
