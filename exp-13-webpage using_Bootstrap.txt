@@ -71,7 +71,7 @@ in the college.</li>
 </div>
 </header><br><br>
 <div id = "footer">
-<p align = "center"> &copy; Geetha K--all rights-reserved </p>
+<p align = "center"> &copy; L Geetha Seri--all rights-reserved </p>
 </div>
 </body>
 </html>
